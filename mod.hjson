@@ -1,0 +1,6 @@
+name: Mindustry Optimizer
+author: Ranii
+main: optimizer.OptimizerMod
+description: A lightweight client-side performance monitor for Mindustry v8.
+version: 0.1.0
+minGameVersion: 160
