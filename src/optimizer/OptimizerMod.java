@@ -72,14 +72,14 @@ public class OptimizerMod extends Mod {
         panel = new Table();
         panel.setPosition(8f, Core.graphics.getHeight() - 8f, Align.topLeft);
         panel.top().left();
-        panel.pad(6f);
+        panel.margin(6f);
 
         readout = new Label("MINDUSTRY OPTIMIZER");
         readout.setColor(Color.white);
         readout.setFontScale(0.8f);
 
         panel.add(readout).left();
-        panel.setTouchable(arc.scene.event.Touchable.disabled);
+        panel.touchable = arc.scene.event.Touchable.disabled;
         Vars.ui.hudGroup.addChild(panel);
     }
 }
