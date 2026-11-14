@@ -24,7 +24,12 @@ public class OptimizerMod extends Mod {
         Events.on(ClientLoadEvent.class, event -> createMonitor());
 
         Events.run(Trigger.update, () -> {
-            if (panel == null || readout == null) return;
+            // Retry until the HUD is available; ClientLoadEvent may arrive before
+            // the HUD group can be attached on some client startup paths.
+            if (panel == null || readout == null) {
+                createMonitor();
+                if (panel == null || readout == null) return;
+            }
 
             boolean inGame = Vars.state.isGame();
             panel.visible = inGame;
@@ -67,10 +72,9 @@ public class OptimizerMod extends Mod {
     }
 
     private void createMonitor() {
-        if (Vars.ui == null || Vars.ui.hudGroup == null) return;
+        if (Core.scene == null || Vars.ui == null || Vars.ui.hudGroup == null) return;
 
         panel = new Table();
-        panel.setPosition(8f, Core.graphics.getHeight() - 8f, Align.topLeft);
         panel.top().left();
         panel.margin(6f);
 
@@ -80,6 +84,11 @@ public class OptimizerMod extends Mod {
 
         panel.add(readout).left();
         panel.touchable = arc.scene.event.Touchable.disabled;
+
+        // Use Scene2D's scaled UI height, not the raw framebuffer pixel height.
+        panel.pack();
+        panel.setPosition(8f, Core.scene.getHeight() - 8f, Align.topLeft);
+
         Vars.ui.hudGroup.addChild(panel);
     }
 }
